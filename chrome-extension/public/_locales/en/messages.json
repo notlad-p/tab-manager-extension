@@ -1,10 +1,10 @@
 {
   "extensionDescription": {
-    "description": "Extension description",
-    "message": "Chrome extension boilerplate developed with Vite, React and Typescript"
+    "description": "Tab Manager to reel in an ungodly amount of tabs.",
+    "message": "Tab Manager to reel in an ungodly amount of tabs."
   },
   "extensionName": {
-    "description": "Extension name",
-    "message": "Chrome extension boilerplate"
+    "description": "Tab Manager",
+    "message": "Tab Manager"
   }
 }
