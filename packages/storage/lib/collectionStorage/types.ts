@@ -64,6 +64,8 @@ export type CollectionsStorage = BaseStorage<Collections> & {
   // Collections
   createCollection: (params: createCollectionParams) => Promise<void>;
   updateCollection: (params: updateCollectionParams) => Promise<void>;
+  deleteCollection: (id: number) => Promise<void>;
+  setActiveCollection: (id: number) => Promise<void>;
 
   // Groups
   createGroup: (params: createGroupParams) => void;

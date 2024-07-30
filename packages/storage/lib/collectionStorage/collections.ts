@@ -38,4 +38,16 @@ export const updateCollection = async ({ collectionId, callback }: updateCollect
   });
 };
 
-// TODO: deleteCollection
+export const deleteCollection = async (id: number) => {
+  await storage.set(collectionsStorage => {
+    const filteredCollections = collectionsStorage.collections.filter(collection => collection.id !== id);
+
+    return { ...collectionsStorage, collections: filteredCollections };
+  });
+};
+
+export const setActiveCollection = async (id: number) => {
+  await storage.set(collectionsStorage => {
+    return { ...collectionsStorage, activeCollectionId: id };
+  });
+};

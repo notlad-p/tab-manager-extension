@@ -1,6 +1,6 @@
 import { createStorage, StorageType } from '../base';
 
-import { createCollection, updateCollection } from './collections';
+import { createCollection, updateCollection, deleteCollection, setActiveCollection } from './collections';
 import { createGroup, updateGroup, deleteGroup } from './groups';
 import { createTabs, deleteTab } from './tabs';
 
@@ -38,6 +38,8 @@ export const collectionsStorage: CollectionsStorage = {
   // Collections Methods
   createCollection,
   updateCollection,
+  deleteCollection,
+  setActiveCollection,
 
   // Group Methods
   createGroup,
