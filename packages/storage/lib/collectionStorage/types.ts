@@ -16,7 +16,7 @@ export type Group = {
 export type GroupCollection = {
   id: number;
   name: string;
-  color: 'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'violet' | 'pink';
+  color: string;
   highestId: number;
   groups: Group[] | [];
 };
