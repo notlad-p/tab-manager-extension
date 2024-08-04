@@ -2,6 +2,19 @@
 <img src="chrome-extension/public/icon-128.png" alt="logo"/>
 <h1> Chrome Extension Boilerplate with<br/>React + Vite + TypeScript</h1>
 
+## IMPORTANT:
+To install packages two commands are necessary, for example to install a package into the popup:
+
+```bash
+pnpm add <package-name> -F @chrome-extension-boilerplate/popup
+```
+
+Then clean turbo:
+
+```
+pnpm turbo daemon clean
+```
+
 ![](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![](https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![](https://badges.aleen42.com/src/vitejs.svg)
