@@ -8,13 +8,14 @@ import type { Collections, CollectionsStorage } from './types';
 
 const defaultValues: Collections = {
   activeCollectionId: 1,
-  highestId: 1,
+  highestCollectionId: 1,
+  highestGroupId: 1,
+  highestTabId: 1,
   collections: [
     {
       id: 1,
       name: 'Inbox',
-      color: 'blue',
-      highestId: 1,
+      color: '#3b82f6',
       groups: [
         {
           id: 1,

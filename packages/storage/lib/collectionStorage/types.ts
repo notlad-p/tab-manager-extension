@@ -29,10 +29,16 @@ export type Collections = {
   collections: GroupCollection[];
 };
 
+type CollectionData = Pick<
+  Collections,
+  'highestCollectionId' | 'highestGroupId' | 'highestTabId' | 'activeCollectionId'
+>;
+
 // method types
 export type createCollectionParams = Pick<GroupCollection, 'name' | 'color'>;
 export type updateCollectionParams = {
-  callback: (collection: GroupCollection) => GroupCollection;
+  callback: (collection: GroupCollection, collectionData: CollectionData) => GroupCollection;
+  storageCallback?: (collectionStorage: Collections) => Partial<Collections>;
   collectionId: number;
 };
 
@@ -42,7 +48,8 @@ export type createGroupParams = {
   tabs: Tab[] | [];
 };
 export type updateGroupParams = {
-  callback: (group: Group) => Group;
+  callback: (group: Group, collectionData: CollectionData) => Group;
+  storageCallback?: (collectionStorage: Collections) => Partial<Collections>;
   collectionId: number;
   groupId: number;
 };

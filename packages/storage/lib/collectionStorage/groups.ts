@@ -6,30 +6,32 @@ import type { createGroupParams, deleteGroupParams, updateGroupParams } from './
 export const createGroup = ({ collectionId, name = '', tabs = [] }: createGroupParams) => {
   updateCollection({
     collectionId,
-    callback: collection => {
-      const newHighestId = collection.highestId + 1;
-      const groupName = name || `Group ${newHighestId}`;
+    callback: (collection, collectionsData) => {
+      const highestGroupId = collectionsData.highestGroupId + 1;
+      const groupName = name || `Group ${highestGroupId}`;
+      // TODO: modify highestGroupId somehow?
 
       const newGroup = {
-        id: newHighestId,
+        id: highestGroupId,
         name: groupName,
         isOpen: false,
         tabs,
       };
 
-      return { ...collection, highestId: newHighestId, groups: [...collection.groups, newGroup] };
+      return { ...collection, groups: [...collection.groups, newGroup] };
     },
+    storageCallback: ({ highestGroupId }) => ({ highestGroupId: highestGroupId + 1 }),
   });
 };
 
 // updateGroup
-export const updateGroup = ({ collectionId, groupId, callback }: updateGroupParams) => {
+export const updateGroup = ({ collectionId, groupId, callback, storageCallback }: updateGroupParams) => {
   updateCollection({
     collectionId,
-    callback: collection => {
+    callback: (collection, collectionData) => {
       const groups = collection.groups.map(group => {
         if (group.id === groupId) {
-          return callback(group);
+          return callback(group, collectionData);
         }
 
         return group;
@@ -37,6 +39,7 @@ export const updateGroup = ({ collectionId, groupId, callback }: updateGroupPara
 
       return { ...collection, groups };
     },
+    storageCallback,
   });
 };
 

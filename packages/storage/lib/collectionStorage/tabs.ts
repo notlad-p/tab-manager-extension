@@ -1,5 +1,3 @@
-import { storage } from './';
-import { updateCollection } from './collections';
 import { updateGroup } from './groups';
 
 import type { deleteTabParams, createTabsParams } from './types';
@@ -12,12 +10,17 @@ export const createTabs = ({ collectionId, groupId, tabs }: createTabsParams) =>
     groupId = 1;
   }
 
+  // TODO: use highestTabId to add ids to tabs
   updateGroup({
     collectionId,
     groupId,
-    callback: group => {
-      return { ...group, tabs: [...group.tabs, ...tabs] };
+    callback: (group, { highestTabId }) => {
+      // add ids to new tabs
+      const newTabs = tabs.map((tab, i) => ({ ...tab, id: highestTabId + i + 1 }));
+
+      return { ...group, tabs: [...group.tabs, ...newTabs] };
     },
+    storageCallback: ({ highestTabId }) => ({ highestTabId: highestTabId + tabs.length }),
   });
 };
 
