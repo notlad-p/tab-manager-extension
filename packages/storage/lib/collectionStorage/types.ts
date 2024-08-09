@@ -1,6 +1,7 @@
 import type { BaseStorage } from '../base';
 
 export type Tab = {
+  id: number;
   title: string;
   url: string;
   favIconUrl: string;
@@ -17,13 +18,14 @@ export type GroupCollection = {
   id: number;
   name: string;
   color: string;
-  highestId: number;
   groups: Group[] | [];
 };
 
 export type Collections = {
   activeCollectionId: number;
-  highestId: number;
+  highestCollectionId: number;
+  highestGroupId: number;
+  highestTabId: number;
   collections: GroupCollection[];
 };
 
