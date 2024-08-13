@@ -1,51 +1,91 @@
-import '@src/Popup.css';
-import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
-import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
+import { useEffect, useState } from 'react';
+import { MantineProvider, Popover, createTheme } from '@mantine/core';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
 
-import { ComponentPropsWithoutRef } from 'react';
+import type { DropResult } from 'react-beautiful-dnd';
+
+import { TabGroupsAccordion, GroupsHeader, CollectionsSidebar } from './components';
+
+import '@mantine/core/styles.css';
+
+// NOTE: hmr package isn't in package.json?
+// devDependencies:
+// "@chrome-extension-boilerplate/hmr": "workspace:*"
+
+const theme = createTheme({
+  colors: {
+    dark: [
+      '#f5f5f4',
+      '#e7e5e4',
+      '#d6d3d1',
+      '#a8a29e',
+      '#78716c',
+      '#57534e',
+      '#44403c',
+      '#292524', // background
+      '#1c1917',
+      '#0c0a09',
+    ],
+  },
+  components: {
+    Popover: Popover.extend({
+      classNames: {
+        dropdown: '!bg-stone-800 !border-stone-700',
+      },
+    }),
+  },
+});
 
 const Popup = () => {
-  const theme = useStorageSuspense(exampleThemeStorage);
+  const [active, setActive] = useState({ title: '', url: '', favIconUrl: '' });
+  const [activeWindow, setActiveWindow] = useState<
+    { title: string | undefined; url: string | undefined; favIconUrl: string | undefined }[] | null
+  >(null);
 
-  return (
-    <div
-      className="App"
-      style={{
-        backgroundColor: theme === 'light' ? '#eee' : '#222',
-      }}>
-      <header className="App-header" style={{ color: theme === 'light' ? '#222' : '#eee' }}>
-        <img src={chrome.runtime.getURL('popup/logo.svg')} className="App-logo" alt="logo" />
+  useEffect(() => {
+    // get current tab
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      const { title, url, favIconUrl } = tabs[0];
 
-        <p>
-          Edit <code>pages/popup/src/Popup.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: theme === 'light' ? '#0281dc' : undefined, marginBottom: '10px' }}>
-          Learn React!
-        </a>
-        <ToggleButton>Toggle theme</ToggleButton>
-      </header>
-    </div>
-  );
-};
+      if (title && url && favIconUrl) setActive({ title, url, favIconUrl });
+    });
 
-const ToggleButton = (props: ComponentPropsWithoutRef<'button'>) => {
-  const theme = useStorageSuspense(exampleThemeStorage);
-  return (
-    <button
-      className={
-        props.className +
-        ' ' +
-        'font-bold mt-4 py-1 px-4 rounded shadow hover:scale-105 ' +
-        (theme === 'light' ? 'bg-white text-black' : 'bg-black text-white')
+    // get current window tabs
+    chrome.tabs.query({ currentWindow: true }, tabs => {
+      const activeWin = tabs.map(({ title, url, favIconUrl }) => ({ title, url, favIconUrl }));
+      if (activeWin.length > 0) {
+        setActiveWindow(activeWin);
       }
-      onClick={exampleThemeStorage.toggle}>
-      {props.children}
-    </button>
+    });
+  }, []);
+
+  // TODO: figure out logic of moving items between 3 different reorderable lists (collections, groups, tabs)
+  const onDragEnd = (result: DropResult) => {
+    // dropped nowhere
+    if (!result.destination) {
+      return;
+    }
+  };
+
+  // <img src={chrome.runtime.getURL('popup/logo.svg')} className="App-logo" alt="logo" />
+  return (
+    <MantineProvider defaultColorScheme="dark" theme={theme}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="absolute top-0 left-0 bottom-0 right-0 overflow-y-auto">
+          <div className="text-sm min-h-[calc(100%-24px)] m-3 flex">
+            <CollectionsSidebar />
+            <div className="w-[70%] pl-3">
+              {/* TODO: add collection header with name and color */}
+
+              {/* Tab Groups */}
+              <GroupsHeader activeWindow={activeWindow} />
+              <TabGroupsAccordion activeTab={active} activeWindow={activeWindow} />
+            </div>
+          </div>
+        </div>
+      </DragDropContext>
+    </MantineProvider>
   );
 };
 
