@@ -2,16 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* set mantine body background color */
+:root[data-mantine-color-scheme='dark'] body {
+  --mantine-color-body: var(--mantine-color-dark-8);
+}
+
 body {
-  width: 300px;
-  height: 260px;
-  margin: 0;
+  width: 644px;
+  height: 420px;
+  /* max-height: 320px; */
+  /* margin: 12px; */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   position: relative;
+  /* overflow-x: auto; */
+  background-color: var(--mantine-color-body);
+
+  @apply text-stone-100;
 }
 
 code {
