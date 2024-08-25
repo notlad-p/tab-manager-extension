@@ -1,9 +1,8 @@
 import { Accordion, AccordionControlProps, ActionIcon, Button, Menu } from '@mantine/core';
 import { IconDotsVertical, IconExternalLink } from '@tabler/icons-react';
-import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
 
 import type { Tab } from '@chrome-extension-boilerplate/storage';
-import { useStorageSuspense } from '@chrome-extension-boilerplate/shared';
+import { createTabs, deleteGroup, useCollectionsStore } from '@src/state/collections';
 
 type CustomAccordionControlProps = AccordionControlProps & {
   groupId: number;
@@ -19,7 +18,7 @@ export const AccordionControl = ({
   groupTabs,
   ...props
 }: CustomAccordionControlProps) => {
-  const collections = useStorageSuspense(collectionsStorage);
+  const activeCollectionId = useCollectionsStore(state => state.activeCollectionId);
 
   // Open handler
   const handleOpenGroup = () => {
@@ -31,11 +30,11 @@ export const AccordionControl = ({
 
   // Menu handlers
   const handleAddCurrentTab = () => {
-    collectionsStorage.createTabs({ groupId, collectionId: collections.activeCollectionId, tabs: [activeTab] });
+    createTabs({ groupId, collectionId: activeCollectionId, tabs: [activeTab] });
   };
 
   const handleAddCurrentWindow = () => {
-    collectionsStorage.createTabs({ groupId, collectionId: collections.activeCollectionId, tabs: activeWindow });
+    createTabs({ groupId, collectionId: activeCollectionId, tabs: activeWindow });
   };
 
   const handleReplaceCurrentWindow = () => {
@@ -43,7 +42,7 @@ export const AccordionControl = ({
   };
 
   const handleDeleteClick = () => {
-    collectionsStorage.deleteGroup({ groupId, collectionId: collections.activeCollectionId });
+    deleteGroup({ groupId, collectionId: activeCollectionId });
   };
 
   return (

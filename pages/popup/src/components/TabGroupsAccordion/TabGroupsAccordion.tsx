@@ -1,11 +1,10 @@
 import { Accordion } from '@mantine/core';
-import { useStorageSuspense } from '@chrome-extension-boilerplate/shared';
-import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
 
 import { AccordionControl } from './AccordionControl';
 import { AccordionPanel } from './AccordionPanel';
 
 import type { Tab } from '@chrome-extension-boilerplate/storage';
+import { updateGroup, useCollectionsStore } from '@src/state/collections';
 
 import './tab-groups-accordion.css';
 
@@ -15,16 +14,14 @@ type TabGroupsAccordionProps = {
 };
 
 export const TabGroupsAccordion = ({ activeTab, activeWindow }: TabGroupsAccordionProps) => {
-  const collections = useStorageSuspense(collectionsStorage);
+  const collections = useCollectionsStore(state => state);
   const activeCollection = collections.collections.find(col => col.id === collections.activeCollectionId);
 
   const handleControlClick = (groupId: number) => {
-    console.log(collections);
-    collectionsStorage.updateGroup({
+    updateGroup({
       collectionId: collections.activeCollectionId,
       groupId,
       callback: group => {
-        console.log(group.isOpen);
         return { ...group, isOpen: !group.isOpen };
       },
     });

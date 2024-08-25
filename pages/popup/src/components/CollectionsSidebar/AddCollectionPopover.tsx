@@ -1,21 +1,21 @@
-import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
+import { useState, type FormEvent } from 'react';
 import { Popover, TextInput, Button, ActionIcon, rem, ColorInput, ColorPicker, Collapse } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
 
-import type { FormEvent } from 'react';
+import { useCollectionsStore } from '@src/state/collections';
 
 const AddCollectionPopover = () => {
   const [popoverIsOpen, setPopoverIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [color, setColor] = useState('#3b82f6');
   const [swatchesOpen, setSwatchesOpen] = useState(false);
+  const createCollection = useCollectionsStore(state => state.createCollection);
 
   const handleCreateCollection = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('create collection');
 
-    collectionsStorage.createCollection({ name, color });
+    createCollection({ name, color });
 
     // reset state
     setName('');

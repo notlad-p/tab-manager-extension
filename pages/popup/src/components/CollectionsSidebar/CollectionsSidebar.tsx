@@ -1,11 +1,11 @@
-import { TextInput, Code, UnstyledButton, Text, Group, rem } from '@mantine/core';
-import { IconSearch, IconSettings, IconDotsVertical } from '@tabler/icons-react';
+import { TextInput, Code, UnstyledButton, Text, Group } from '@mantine/core';
+import { IconSearch, IconSettings } from '@tabler/icons-react';
 
-import './CollectionsSidebar.css';
-import { useStorageSuspense } from '@chrome-extension-boilerplate/shared';
-import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
 import AddCollectionPopover from './AddCollectionPopover';
 import CollectionOptionsMenu from './CollectionOptionsMenu';
+import { setActiveCollection, useCollectionsStore } from '@src/state/collections';
+
+import './CollectionsSidebar.css';
 
 const links = [
   {
@@ -23,11 +23,11 @@ const links = [
 
 // NOTE: inspired by: https://ui.mantine.dev/component/navbar-search/
 export const CollectionsSidebar = () => {
-  const collections = useStorageSuspense(collectionsStorage);
+  const collections = useCollectionsStore(state => state);
 
   const handleCollectionLinkClick = (id: number) => {
     if (id !== collections.activeCollectionId) {
-      collectionsStorage.setActiveCollection(id);
+      setActiveCollection(id);
     }
   };
 
@@ -49,6 +49,7 @@ export const CollectionsSidebar = () => {
     </UnstyledButton>
   ));
 
+  // TODO: draggable (reorder collections) & dropable (move groups to collections)
   const collectionLinks = collections.collections.map(collection => (
     <UnstyledButton
       key={collection.id}
@@ -87,6 +88,8 @@ export const CollectionsSidebar = () => {
 
           <AddCollectionPopover />
         </Group>
+
+        {/* TODO: droppable here (reordering collections) */}
         <div className="px-2.5 pb-1.5">{collectionLinks}</div>
       </div>
     </nav>

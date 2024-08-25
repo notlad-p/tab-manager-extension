@@ -1,6 +1,7 @@
-import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
 import { Menu } from '@mantine/core';
 import { IconDotsVertical, IconExternalLink, IconPencil, IconTrash } from '@tabler/icons-react';
+
+import { deleteCollection } from '@src/state/collections';
 
 type CollectionOptionsMenuProps = {
   collectionId: number;
@@ -16,7 +17,7 @@ const CollectionOptionsMenu = ({ collectionId }: CollectionOptionsMenuProps) => 
   };
 
   const handleDeleteClick = () => {
-    collectionsStorage.deleteCollection(collectionId);
+    deleteCollection(collectionId);
   };
 
   return (

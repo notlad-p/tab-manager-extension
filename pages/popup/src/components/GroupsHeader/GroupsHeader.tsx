@@ -1,9 +1,8 @@
-import { useStorageSuspense } from '@chrome-extension-boilerplate/shared';
-import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
 import { Popover, Button, TextInput, Checkbox } from '@mantine/core';
 import { useState, FormEvent } from 'react';
 import type { Tab } from '@chrome-extension-boilerplate/storage';
 import { IconPlus } from '@tabler/icons-react';
+import { createGroup, useCollectionsStore } from '@src/state/collections';
 
 type GroupsHeaderProps = {
   activeWindow: Tab[] | null;
@@ -14,8 +13,10 @@ export const GroupsHeader = ({ activeWindow }: GroupsHeaderProps) => {
   const [groupName, setGroupName] = useState('');
   const [addCurrentWindow, setAddCurrentWindow] = useState(false);
 
-  const collections = useStorageSuspense(collectionsStorage);
-  const activeCollection = collections.collections.find(col => col.id === collections.activeCollectionId);
+  const activeCollectionId = useCollectionsStore(state => state.activeCollectionId);
+  const activeCollection = useCollectionsStore(state =>
+    state.collections.find(col => col.id === state.activeCollectionId),
+  );
   const numTabs = activeCollection?.groups.reduce((acc, cur) => acc + cur.tabs.length, 0);
 
   const handleCreateNewGroup = (e: FormEvent<HTMLFormElement>) => {
@@ -23,8 +24,8 @@ export const GroupsHeader = ({ activeWindow }: GroupsHeaderProps) => {
     setNewGroupOpen(false);
 
     if (activeWindow) {
-      collectionsStorage.createGroup({
-        collectionId: collections.activeCollectionId,
+      createGroup({
+        collectionId: activeCollectionId,
         name: groupName,
         tabs: addCurrentWindow ? activeWindow : [],
       });
@@ -71,7 +72,7 @@ export const GroupsHeader = ({ activeWindow }: GroupsHeaderProps) => {
               <Checkbox
                 label="Add tabs in current window"
                 size="xs"
-                value={addCurrentWindow}
+                checked={addCurrentWindow}
                 onChange={event => setAddCurrentWindow(event.currentTarget.checked)}
               />
               <div className="flex items-end justify-end">
