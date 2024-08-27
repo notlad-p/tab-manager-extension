@@ -15,7 +15,7 @@ export const GroupsHeader = ({ activeWindow }: GroupsHeaderProps) => {
 
   const activeCollectionId = useCollectionsStore(state => state.activeCollectionId);
   const activeCollection = useCollectionsStore(state =>
-    state.collections.find(col => col.id === state.activeCollectionId),
+    state.collections?.find(col => col.id === state.activeCollectionId),
   );
   const numTabs = activeCollection?.groups.reduce((acc, cur) => acc + cur.tabs.length, 0);
 
@@ -23,7 +23,7 @@ export const GroupsHeader = ({ activeWindow }: GroupsHeaderProps) => {
     e.preventDefault();
     setNewGroupOpen(false);
 
-    if (activeWindow) {
+    if (activeWindow && activeCollectionId) {
       createGroup({
         collectionId: activeCollectionId,
         name: groupName,

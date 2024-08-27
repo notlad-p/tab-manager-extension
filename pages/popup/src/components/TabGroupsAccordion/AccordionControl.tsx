@@ -30,11 +30,15 @@ export const AccordionControl = ({
 
   // Menu handlers
   const handleAddCurrentTab = () => {
-    createTabs({ groupId, collectionId: activeCollectionId, tabs: [activeTab] });
+    if (activeCollectionId) {
+      createTabs({ groupId, collectionId: activeCollectionId, tabs: [activeTab] });
+    }
   };
 
   const handleAddCurrentWindow = () => {
-    createTabs({ groupId, collectionId: activeCollectionId, tabs: activeWindow });
+    if (activeCollectionId) {
+      createTabs({ groupId, collectionId: activeCollectionId, tabs: activeWindow });
+    }
   };
 
   const handleReplaceCurrentWindow = () => {
@@ -42,7 +46,9 @@ export const AccordionControl = ({
   };
 
   const handleDeleteClick = () => {
-    deleteGroup({ groupId, collectionId: activeCollectionId });
+    if (activeCollectionId) {
+      deleteGroup({ groupId, collectionId: activeCollectionId });
+    }
   };
 
   return (

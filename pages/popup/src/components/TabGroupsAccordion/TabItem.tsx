@@ -3,8 +3,8 @@ import { IconX } from '@tabler/icons-react';
 
 import { Link } from '../Link/Link';
 
-import { collectionsStorage, type Tab } from '@chrome-extension-boilerplate/storage';
-import { useStorageSuspense } from '@chrome-extension-boilerplate/shared';
+import type { Tab } from '@chrome-extension-boilerplate/storage';
+import { deleteTab, useCollectionsStore } from '@src/state/collections';
 
 type TabProps = {
   tab: Tab;
@@ -14,12 +14,12 @@ type TabProps = {
 
 const TabItem: React.FC<TabProps> = ({ tab, groupId, tabIndex }: TabProps) => {
   const { url, favIconUrl, title } = tab;
-  const collections = useStorageSuspense(collectionsStorage);
+  const activeCollectionId = useCollectionsStore(state => state.activeCollectionId);
 
   const handleRemoveTab = (groupId: number) => {
     // TODO: use tab id instead of index
-    if (tabIndex) {
-      collectionsStorage.deleteTab({ collectionId: collections.activeCollectionId, groupId, tabIndex });
+    if (tabIndex && activeCollectionId) {
+      deleteTab({ collectionId: activeCollectionId, groupId, tabIndex });
     }
   };
 

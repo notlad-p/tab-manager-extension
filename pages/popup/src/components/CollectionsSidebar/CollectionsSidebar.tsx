@@ -50,7 +50,7 @@ export const CollectionsSidebar = () => {
   ));
 
   // TODO: draggable (reorder collections) & dropable (move groups to collections)
-  const collectionLinks = collections.collections.map(collection => (
+  const collectionLinks = collections.collections?.map(collection => (
     <UnstyledButton
       key={collection.id}
       className={`collection-item ${collection.id === collections.activeCollectionId && '!bg-opacity-40 !bg-stone-700'} flex items-center justify-between w-full rounded !text-xs font-medium !pl-3 !py-0.5 mb-1 hover:!bg-stone-700 hover:!bg-opacity-70`}
