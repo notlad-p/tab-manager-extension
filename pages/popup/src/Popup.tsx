@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { MantineProvider, Popover, createTheme } from '@mantine/core';
-import { DragDropContext } from 'react-beautiful-dnd';
 import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
+import { MantineProvider, Popover, createTheme } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { useCollectionsStore } from './state/collections';
 
 import type { DropResult } from 'react-beautiful-dnd';
 
-import { TabGroupsAccordion, GroupsHeader, CollectionsSidebar } from './components';
+import { CollectionsSidebar, GroupsHeader, TabGroupsAccordion } from './components';
 
 import '@mantine/core/styles.css';
 
@@ -43,6 +44,10 @@ const Popup = () => {
     { title: string | undefined; url: string | undefined; favIconUrl: string | undefined }[] | null
   >(null);
 
+  const activeCollection = useCollectionsStore(state =>
+    state?.collections?.find(col => col.id === state.activeCollectionId),
+  );
+
   useEffect(() => {
     // get current tab
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
@@ -78,9 +83,13 @@ const Popup = () => {
             <div className="w-[70%] pl-3">
               {/* TODO: add collection header with name and color */}
 
-              {/* Tab Groups */}
-              <GroupsHeader activeWindow={activeWindow} />
-              <TabGroupsAccordion activeTab={active} activeWindow={activeWindow} />
+              {activeCollection && (
+                <>
+                  <GroupsHeader activeWindow={activeWindow} />
+                  {/* Tab Groups */}
+                  <TabGroupsAccordion activeTab={active} activeWindow={activeWindow} />
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { create, type Mutate, StoreApi } from 'zustand';
 import { persist, type PersistStorage } from 'zustand/middleware';
-import { collectionsStorage, type Collections } from '@chrome-extension-boilerplate/storage';
+import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
+import type { Collections, GroupCollection } from '@chrome-extension-boilerplate/storage';
 
 const storage: PersistStorage<Collections> = {
   getItem: async () => {
@@ -12,29 +13,23 @@ const storage: PersistStorage<Collections> = {
   removeItem: () => null,
 };
 
-const defaultValues: Collections = {
-  activeCollectionId: 1,
-  highestCollectionId: 1,
-  highestGroupId: 1,
-  highestTabId: 1,
-  collections: [
-    {
-      id: 1,
-      name: 'Inbox',
-      color: '#3b82f6',
-      groups: [
-        {
-          id: 1,
-          name: 'Unsorted',
-          isOpen: true,
-          tabs: [],
-        },
-      ],
-    },
-  ],
+type CollectionsState = {
+  activeCollectionId: number | null;
+  highestCollectionId: number | null;
+  highestGroupId: number | null;
+  highestTabId: number | null;
+  collections: GroupCollection[] | null;
 };
 
-type CollectionsStore = Collections & {
+const defaultValues: CollectionsState = {
+  activeCollectionId: null,
+  highestCollectionId: null,
+  highestGroupId: null,
+  highestTabId: null,
+  collections: null,
+};
+
+type CollectionsStore = CollectionsState & {
   createCollection: (options: { name?: string; color?: string }) => void;
 };
 
