@@ -69,7 +69,7 @@ export const AccordionPanel = ({ collectionId, group }: AccordionPanelProps) => 
           <SortableContext items={group.tabs.map(tab => tab.id)} strategy={verticalListSortingStrategy}>
             {group.tabs.map((tab, j) => (
               <SortableItem key={tab.id} element="li" id={tab.id}>
-                <TabItem key={tab.id} tab={tab} tabIndex={j} groupId={group.id} />
+                <TabItem tab={tab} tabIndex={j} groupId={group.id} />
               </SortableItem>
             ))}
           </SortableContext>
