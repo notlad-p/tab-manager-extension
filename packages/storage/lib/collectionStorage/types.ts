@@ -66,7 +66,7 @@ export type createTabsParams = {
 export type deleteTabParams = {
   collectionId: number;
   groupId: number;
-  tabIndex: number;
+  tabId: number;
 };
 
 export type CollectionsStorage = BaseStorage<Collections> & {

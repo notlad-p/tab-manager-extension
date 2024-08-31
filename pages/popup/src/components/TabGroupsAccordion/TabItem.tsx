@@ -9,17 +9,15 @@ import { deleteTab, useCollectionsStore } from '@src/state/collections';
 type TabProps = {
   tab: Tab;
   groupId?: number;
-  tabIndex?: number;
 };
 
-const TabItem: React.FC<TabProps> = ({ tab, groupId, tabIndex }: TabProps) => {
+const TabItem: React.FC<TabProps> = ({ tab, groupId }: TabProps) => {
   const { url, favIconUrl, title } = tab;
   const activeCollectionId = useCollectionsStore(state => state.activeCollectionId);
 
   const handleRemoveTab = (groupId: number) => {
-    // TODO: use tab id instead of index
-    if (tabIndex && activeCollectionId) {
-      deleteTab({ collectionId: activeCollectionId, groupId, tabIndex });
+    if (tab.id && activeCollectionId) {
+      deleteTab({ collectionId: activeCollectionId, groupId, tabId: tab.id });
     }
   };
 

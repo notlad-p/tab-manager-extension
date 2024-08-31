@@ -52,12 +52,12 @@ export const createTabs = ({ collectionId, groupId, tabs }: createTabsParams) =>
 // };
 
 // deleteTab
-export const deleteTab = ({ collectionId, groupId, tabIndex }: deleteTabParams) => {
+export const deleteTab = ({ collectionId, groupId, tabId }: deleteTabParams) => {
   updateGroup({
     collectionId,
     groupId,
     callback: group => {
-      const filteredTabs = group.tabs.filter((_tab, i) => i !== tabIndex);
+      const filteredTabs = group.tabs.filter(tab => tab.id !== tabId);
 
       return { ...group, tabs: filteredTabs };
     },
