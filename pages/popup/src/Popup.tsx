@@ -1,10 +1,7 @@
 import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
 import { MantineProvider, Popover, createTheme } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
 import { useCollectionsStore } from './state/collections';
-
-import type { DropResult } from 'react-beautiful-dnd';
 
 import { CollectionsSidebar, GroupsHeader, TabGroupsAccordion } from './components';
 
@@ -61,39 +58,29 @@ const Popup = () => {
       const activeWin = tabs.map(({ title, url, favIconUrl }) => ({ title, url, favIconUrl }));
       if (activeWin.length > 0) {
         setActiveWindow(activeWin);
+        // TODO: how to get info from discarded tabs? manually set url, favicon, title when discarding?
+        // console.log(activeWin);
       }
     });
   }, []);
 
-  // TODO: figure out logic of moving items between 3 different reorderable lists (collections, groups, tabs)
-  const onDragEnd = (result: DropResult) => {
-    // dropped nowhere
-    if (!result.destination) {
-      return;
-    }
-  };
-
   // <img src={chrome.runtime.getURL('popup/logo.svg')} className="App-logo" alt="logo" />
   return (
     <MantineProvider defaultColorScheme="dark" theme={theme}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="absolute top-0 left-0 bottom-0 right-0 overflow-y-auto">
-          <div className="text-sm min-h-[calc(100%-24px)] m-3 flex">
-            <CollectionsSidebar />
-            <div className="w-[70%] pl-3">
-              {/* TODO: add collection header with name and color */}
-
-              {activeCollection && (
-                <>
-                  <GroupsHeader activeWindow={activeWindow} />
-                  {/* Tab Groups */}
-                  <TabGroupsAccordion activeTab={active} activeWindow={activeWindow} />
-                </>
-              )}
-            </div>
+      <div className="absolute top-0 left-0 bottom-0 right-0 overflow-y-auto">
+        <div className="text-sm min-h-[calc(100%-24px)] m-3 flex">
+          <CollectionsSidebar />
+          <div className="w-[70%] pl-3">
+            {activeCollection && (
+              <>
+                <GroupsHeader activeWindow={activeWindow} />
+                {/* Tab Groups */}
+                <TabGroupsAccordion activeTab={active} activeWindow={activeWindow} />
+              </>
+            )}
           </div>
         </div>
-      </DragDropContext>
+      </div>
     </MantineProvider>
   );
 };
