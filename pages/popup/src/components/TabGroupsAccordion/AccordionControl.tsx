@@ -23,8 +23,13 @@ export const AccordionControl = ({
   // Open handler
   const handleOpenGroup = () => {
     for (let i = groupTabs.length - 1; i >= 0; i--) {
-      // open list of tabs
-      chrome.tabs.create({ url: groupTabs[i].url, active: false });
+      // create the tab
+      chrome.tabs.create({ url: groupTabs[i].url, active: false }, tab => {
+        // TODO: discard based on user setting in options page,
+        // if number of tabs being opened is greater than x, then discard them
+        chrome.runtime.sendMessage({ action: 'discardTab', data: tab.id });
+        console.log(tab.id);
+      });
     }
   };
 
