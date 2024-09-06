@@ -1,28 +1,22 @@
+import { v4 as uuidv4 } from 'uuid';
 import { updateGroup } from './groups';
 
 import type {
   createTabsParams,
   deleteTabParams,
 } from '@chrome-extension-boilerplate/storage/lib/collectionStorage/types';
-// (tabIndex: number, groupId: Group['id']) => Promise<void>;
 
 // createTabs
 export const createTabs = ({ collectionId, groupId, tabs }: createTabsParams) => {
-  // put tab in 'Inbox/Unsorted' group
-  if (!groupId) {
-    groupId = 1;
-  }
-
   updateGroup({
     collectionId,
     groupId,
-    callback: (group, { highestTabId }) => {
+    callback: group => {
       // add ids to new tabs
-      const newTabs = tabs.map((tab, i) => ({ ...tab, id: highestTabId + i + 1 }));
+      const newTabs = tabs.map(tab => ({ ...tab, id: uuidv4() }));
 
       return { ...group, tabs: [...group.tabs, ...newTabs] };
     },
-    storageCallback: ({ highestTabId }) => ({ highestTabId: highestTabId + tabs.length }),
   });
 };
 

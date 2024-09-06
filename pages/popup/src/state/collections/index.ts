@@ -1,4 +1,4 @@
-import { create, type Mutate, StoreApi } from 'zustand';
+import { create } from 'zustand';
 import { persist, type PersistStorage } from 'zustand/middleware';
 import { collectionsStorage } from '@chrome-extension-boilerplate/storage';
 import type { Collections, GroupCollection } from '@chrome-extension-boilerplate/storage';
@@ -14,63 +14,23 @@ const storage: PersistStorage<Collections> = {
 };
 
 type CollectionsState = {
-  activeCollectionId: number | null;
-  highestCollectionId: number | null;
-  highestGroupId: number | null;
-  highestTabId: number | null;
+  activeCollectionId: string | null;
   collections: GroupCollection[] | null;
 };
 
 const defaultValues: CollectionsState = {
   activeCollectionId: null,
-  highestCollectionId: null,
-  highestGroupId: null,
-  highestTabId: null,
   collections: null,
 };
 
-type CollectionsStore = CollectionsState & {
-  createCollection: (options: { name?: string; color?: string }) => void;
-};
-
-// TODO: copy methods over to this store
-// - First test by adding collection & see if storage changes - IT DOES!!!
-//
 // TODO: now:
-// - copy over all methods from storage
-// - use those methods in components
 // - implement storage update event listeners (when storage updates, so does global zustand state)
 //  - USE `subscribe` METHOD already in storage?
 //  - Only change if zustand store != storage and maybe try to detect that change didn't come from zustand action
-// - implement drag and drop with zustand state
-export const useCollectionsStore = create<CollectionsStore>()(
+export const useCollectionsStore = create<CollectionsState>()(
   persist(
-    set => ({
+    () => ({
       ...defaultValues,
-      createCollection: ({ name, color }) =>
-        set(state => {
-          const highestCollectionIdId = state.highestCollectionId + 1;
-
-          if (!name) {
-            name = 'Collection ' + highestCollectionIdId;
-          }
-
-          if (!color) {
-            color = '#3b82f6';
-          }
-
-          const collection = {
-            id: highestCollectionIdId,
-            name,
-            color,
-            highestId: 1,
-            groups: [],
-          };
-
-          const newCollections = [...state.collections, collection];
-
-          return { ...state, highestCollectionId: highestCollectionIdId, collections: newCollections };
-        }),
     }),
     {
       name: 'collections-storage',

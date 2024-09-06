@@ -1,87 +1,77 @@
 import type { BaseStorage } from '../base';
 
 export type Tab = {
-  id: number;
+  id: string;
   title: string;
   url: string;
   favIconUrl: string;
 };
 
 export type Group = {
-  id: number;
+  id: string;
   name: string;
   isOpen: boolean;
   tabs: Tab[];
 };
 
 export type GroupCollection = {
-  id: number;
+  id: string;
   name: string;
   color: string;
   groups: Group[] | [];
 };
 
 export type Collections = {
-  activeCollectionId: number;
-  highestCollectionId: number;
-  highestGroupId: number;
-  highestTabId: number;
+  activeCollectionId: string;
   collections: GroupCollection[];
 };
-
-type CollectionData = Pick<
-  Collections,
-  'highestCollectionId' | 'highestGroupId' | 'highestTabId' | 'activeCollectionId'
->;
 
 // method types
 export type createCollectionParams = Pick<GroupCollection, 'name' | 'color'>;
 export type updateCollectionParams = {
-  callback: (collection: GroupCollection, collectionData: CollectionData) => GroupCollection;
-  storageCallback?: (collectionStorage: Collections) => Partial<Collections>;
-  collectionId: number;
+  callback: (collection: GroupCollection) => GroupCollection;
+  collectionId: string;
 };
 
 export type createGroupParams = {
-  collectionId: number;
+  collectionId: string;
   name?: string;
   tabs: Tab[] | [];
 };
 export type updateGroupParams = {
-  callback: (group: Group, collectionData: CollectionData) => Group;
-  storageCallback?: (collectionStorage: Collections) => Partial<Collections>;
-  collectionId: number;
-  groupId: number;
+  callback: (group: Group) => Group;
+  collectionId: string;
+  groupId: string;
 };
 export type deleteGroupParams = {
-  collectionId: number;
-  groupId: number;
+  collectionId: string;
+  groupId: string;
 };
 
 export type createTabsParams = {
-  collectionId: number;
-  groupId: number;
+  collectionId: string;
+  groupId: string;
   tabs: Tab[];
 };
 export type deleteTabParams = {
-  collectionId: number;
-  groupId: number;
-  tabId: number;
+  collectionId: string;
+  groupId: string;
+  tabId: string;
 };
 
 export type CollectionsStorage = BaseStorage<Collections> & {
-  // Collections
-  createCollection: (params: createCollectionParams) => Promise<void>;
-  updateCollection: (params: updateCollectionParams) => Promise<void>;
-  deleteCollection: (id: number) => Promise<void>;
-  setActiveCollection: (id: number) => Promise<void>;
-
-  // Groups
-  createGroup: (params: createGroupParams) => void;
-  updateGroup: (params: updateGroupParams) => void;
-  deleteGroup: (params: deleteGroupParams) => void;
-
-  // Tabs
-  createTabs: (params: createTabsParams) => void;
-  deleteTab: (params: deleteTabParams) => void;
+  // // Collections
+  // createCollection: (params: createCollectionParams) => Promise<void>;
+  // updateCollection: (params: updateCollectionParams) => Promise<void>;
+  // deleteCollection: (id: string) => Promise<void>;
+  // setActiveCollection: (id: string) => Promise<void>;
+  //
+  // // Groups
+  // createGroup: (params: createGroupParams) => void;
+  // updateGroup: (params: updateGroupParams) => void;
+  // deleteGroup: (params: deleteGroupParams) => void;
+  //
+  // // Tabs
+  // createTabs: (params: createTabsParams) => void;
+  // deleteTab: (params: deleteTabParams) => void;
 };
