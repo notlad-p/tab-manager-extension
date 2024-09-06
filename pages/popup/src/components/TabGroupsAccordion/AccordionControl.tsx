@@ -5,7 +5,7 @@ import type { Tab } from '@chrome-extension-boilerplate/storage';
 import { createTabs, deleteGroup, useCollectionsStore } from '@src/state/collections';
 
 type CustomAccordionControlProps = AccordionControlProps & {
-  groupId: number;
+  groupId: string;
   activeTab: Tab;
   activeWindow: Tab[];
   groupTabs: Tab[];

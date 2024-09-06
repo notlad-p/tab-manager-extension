@@ -25,7 +25,7 @@ const links = [
 export const CollectionsSidebar = () => {
   const collections = useCollectionsStore(state => state);
 
-  const handleCollectionLinkClick = (id: number) => {
+  const handleCollectionLinkClick = (id: string) => {
     if (id !== collections.activeCollectionId) {
       setActiveCollection(id);
     }

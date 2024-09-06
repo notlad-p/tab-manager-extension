@@ -4,7 +4,7 @@ import { IconDotsVertical, IconExternalLink, IconPencil, IconTrash } from '@tabl
 import { deleteCollection } from '@src/state/collections';
 
 type CollectionOptionsMenuProps = {
-  collectionId: number;
+  collectionId: string;
 };
 
 const CollectionOptionsMenu = ({ collectionId }: CollectionOptionsMenuProps) => {
