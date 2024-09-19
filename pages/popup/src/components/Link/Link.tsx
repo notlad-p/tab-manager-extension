@@ -9,8 +9,6 @@ export const Link = ({ href, children }: LinkProps) => {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     chrome.tabs.create({ url: href });
-    // e.button === 2
-    console.log(e.button, e);
   };
 
   const handleAuxClick = (e: React.MouseEvent<HTMLAnchorElement>) => {

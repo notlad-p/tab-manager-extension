@@ -43,8 +43,6 @@ const manifest = Object.assign(
     icons: {
       128: 'icon-128.png',
     },
-    // TODO: use content script for floating button to save tab
-    //
     // content_scripts: [
     //   {
     //     matches: ['http://*/*', 'https://*/*', '<all_urls>'],
