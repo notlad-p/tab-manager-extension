@@ -8,14 +8,14 @@ exampleThemeStorage.get().then(theme => {
 let loadingTabs: number[] = [];
 
 type MessageType = {
-  action: 'loadingTabs';
+  action: 'loadAndDiscardTab';
   data: number;
 };
 
 chrome.runtime.onMessage.addListener((message: MessageType, _sender, _sendResponse) => {
   const { action, data } = message;
 
-  if (action === 'loadingTabs') {
+  if (action === 'loadAndDiscardTab') {
     console.log('pushing to loading tabs');
     loadingTabs.push(data);
   }
