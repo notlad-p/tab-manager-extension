@@ -23,16 +23,18 @@ const TabItem: React.FC<TabProps> = ({ tab, groupId }: TabProps) => {
 
   return (
     <Link href={url}>
-      <div className="tab-list-item flex gap-2 py-0.5 items-center hover:underline cursor-pointer">
-        <button
-          className="tab-x-icon-container p-2 pr-0 opacity-0"
-          onClick={e => {
-            e.stopPropagation();
-            if (groupId) handleRemoveTab(groupId);
-          }}
-        >
-          <IconX className="text-stone-400" size={16} />
-        </button>
+      <div className="tab-list-item flex gap-2 py-0.5 items-center hover:underline cursor-pointer bg-stone-800 rounded">
+        {groupId && (
+          <button
+            className="tab-x-icon-container p-2 pr-0 opacity-0"
+            onClick={e => {
+              e.stopPropagation();
+              if (groupId) handleRemoveTab(groupId);
+            }}
+          >
+            <IconX className="text-stone-400" size={16} />
+          </button>
+        )}
         <img src={favIconUrl} alt={title[0]} className="w-4" />
         <p className="text-stone-200 text-nowrap overflow-hidden overflow-ellipsis">{title}</p>
       </div>

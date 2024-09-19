@@ -1,11 +1,12 @@
 import { withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
 import { MantineProvider, Popover, createTheme } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useCollectionsStore } from './state/collections';
 
-import { CollectionsSidebar, GroupsHeader, TabGroupsAccordion } from './components';
+import { CollectionsSidebar, CustomDndContext, GroupsHeader, TabGroups } from './components';
 
 import '@mantine/core/styles.css';
+import { useActiveTabsStore } from './state/active-tabs';
 
 // NOTE: hmr package isn't in package.json?
 // devDependencies:
@@ -36,10 +37,8 @@ const theme = createTheme({
 });
 
 const Popup = () => {
-  const [active, setActive] = useState({ title: '', url: '', favIconUrl: '' });
-  const [activeWindow, setActiveWindow] = useState<
-    { title: string | undefined; url: string | undefined; favIconUrl: string | undefined }[] | null
-  >(null);
+  const setActiveWindow = useActiveTabsStore(state => state.setActiveWindow);
+  const setActiveTab = useActiveTabsStore(state => state.setActiveTab);
 
   const activeCollection = useCollectionsStore(state =>
     state?.collections?.find(col => col.id === state.activeCollectionId),
@@ -48,37 +47,45 @@ const Popup = () => {
   useEffect(() => {
     // get current tab
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-      const { title, url, favIconUrl } = tabs[0];
+      let { title, url, favIconUrl } = tabs[0];
 
-      if (title && url && favIconUrl) setActive({ title, url, favIconUrl });
+      // check for unefined values
+      if (!title) title = '';
+      if (!url) url = '';
+      if (!favIconUrl) favIconUrl = '';
+
+      setActiveTab({ title, url, favIconUrl });
     });
 
     // get current window tabs
     chrome.tabs.query({ currentWindow: true }, tabs => {
-      const activeWin = tabs.map(({ title, url, favIconUrl }) => ({ title, url, favIconUrl }));
-      if (activeWin.length > 0) {
-        setActiveWindow(activeWin);
-        // TODO: how to get info from discarded tabs? manually set url, favicon, title when discarding?
-        // console.log(activeWin);
-      }
+      const activeWin = tabs.map(({ title, url, favIconUrl }) => {
+        // check for undefined values
+        if (!title) title = '';
+        if (!url) url = '';
+        if (!favIconUrl) favIconUrl = '';
+
+        return { title, url, favIconUrl };
+      });
+
+      setActiveWindow(activeWin);
+      // TODO: how to get info from discarded tabs? manually set url, favicon, title when discarding?
     });
   }, []);
 
-  // <img src={chrome.runtime.getURL('popup/logo.svg')} className="App-logo" alt="logo" />
   return (
     <MantineProvider defaultColorScheme="dark" theme={theme}>
       <div className="absolute top-0 left-0 bottom-0 right-0 overflow-y-auto">
         <div className="text-sm min-h-[calc(100%-24px)] m-3 flex">
-          <CollectionsSidebar />
-          <div className="w-[70%] pl-3">
-            {activeCollection && (
-              <>
-                <GroupsHeader activeWindow={activeWindow} />
-                {/* Tab Groups */}
-                <TabGroupsAccordion activeTab={active} activeWindow={activeWindow} />
-              </>
-            )}
-          </div>
+          {activeCollection && (
+            <CustomDndContext>
+              <CollectionsSidebar />
+              <div className="w-[70%] pl-3">
+                <GroupsHeader />
+                <TabGroups />
+              </div>
+            </CustomDndContext>
+          )}
         </div>
       </div>
     </MantineProvider>
