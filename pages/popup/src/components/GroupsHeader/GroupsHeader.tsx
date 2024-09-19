@@ -1,17 +1,14 @@
 import { Popover, Button, TextInput, Checkbox } from '@mantine/core';
 import { useState, FormEvent } from 'react';
-import type { Tab } from '@chrome-extension-boilerplate/storage';
 import { IconPlus } from '@tabler/icons-react';
 import { createGroup, useCollectionsStore } from '@src/state/collections';
+import { useActiveTabsStore } from '@src/state/active-tabs';
 
-type GroupsHeaderProps = {
-  activeWindow: Tab[] | null;
-};
-
-export const GroupsHeader = ({ activeWindow }: GroupsHeaderProps) => {
+export const GroupsHeader = () => {
   const [newGroupOpen, setNewGroupOpen] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [addCurrentWindow, setAddCurrentWindow] = useState(false);
+  const activeWindow = useActiveTabsStore(state => state.activeWindow);
 
   const activeCollectionId = useCollectionsStore(state => state.activeCollectionId);
   const activeCollection = useCollectionsStore(state =>
