@@ -26,12 +26,15 @@
     "@mantine/core": "^7.11.1",
     "@mantine/hooks": "^7.11.1",
     "@tabler/icons-react": "^3.9.0",
+    "classnames": "^2.5.1",
+    "uuid": "^10.0.0",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@chrome-extension-boilerplate/hmr": "workspace:*",
     "@chrome-extension-boilerplate/tailwindcss-config": "workspace:*",
     "@chrome-extension-boilerplate/tsconfig": "workspace:*",
+    "@types/uuid": "^10.0.0",
     "postcss-preset-mantine": "^1.15.0",
     "postcss-simple-vars": "^7.0.1"
   }
