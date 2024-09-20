@@ -41,11 +41,12 @@ export const TabGroups = () => {
           {activeCollection?.groups.map(group => (
             <GroupContainer key={group.id} group={group}>
               <SortableContext items={group.tabs.map(tab => tab.id)} strategy={verticalListSortingStrategy}>
-                {group.tabs.map(tab => (
-                  <SortableItem key={tab.id} element="li" id={tab.id} data={{ type: 'tab', groupId: group.id }}>
-                    <TabItem tab={tab} groupId={group.id} />
-                  </SortableItem>
-                ))}
+                {group.isOpen &&
+                  group.tabs.map(tab => (
+                    <SortableItem key={tab.id} element="li" id={tab.id} data={{ type: 'tab', groupId: group.id }}>
+                      <TabItem tab={tab} groupId={group.id} />
+                    </SortableItem>
+                  ))}
               </SortableContext>
             </GroupContainer>
           ))}
