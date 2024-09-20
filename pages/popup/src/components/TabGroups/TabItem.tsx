@@ -1,10 +1,12 @@
-import React from 'react';
-import { IconX } from '@tabler/icons-react';
+import React, { useState } from 'react';
+import { IconWorld, IconX } from '@tabler/icons-react';
 
 import { Link } from '../Link/Link';
 
 import type { Tab } from '@chrome-extension-boilerplate/storage';
 import { deleteTab, useCollectionsStore } from '@src/state/collections';
+
+import './tab-item.css';
 
 type TabProps = {
   tab: Tab;
@@ -13,12 +15,17 @@ type TabProps = {
 
 const TabItem: React.FC<TabProps> = ({ tab, groupId }: TabProps) => {
   const { url, favIconUrl, title } = tab;
+  const [imageErr, setImageErr] = useState(false);
   const activeCollectionId = useCollectionsStore(state => state.activeCollectionId);
 
   const handleRemoveTab = (groupId: string) => {
     if (tab.id && activeCollectionId) {
       deleteTab({ collectionId: activeCollectionId, groupId, tabId: tab.id });
     }
+  };
+
+  const handleImageError = () => {
+    setImageErr(true);
   };
 
   return (
@@ -35,7 +42,11 @@ const TabItem: React.FC<TabProps> = ({ tab, groupId }: TabProps) => {
             <IconX className="text-stone-400" size={16} />
           </button>
         )}
-        <img src={favIconUrl} alt={title[0]} className="w-4" />
+        {favIconUrl && !imageErr ? (
+          <img src={favIconUrl} alt="" onError={handleImageError} className="w-4" />
+        ) : (
+          <IconWorld size={16} className="min-w-4" />
+        )}
         <p className="text-stone-200 text-nowrap overflow-hidden overflow-ellipsis">{title}</p>
       </div>
     </Link>

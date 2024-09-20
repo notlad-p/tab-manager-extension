@@ -1,0 +1,4 @@
+.tab-list-item:hover .tab-x-icon-container {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
