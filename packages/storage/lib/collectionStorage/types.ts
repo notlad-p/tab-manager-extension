@@ -36,7 +36,7 @@ export type updateCollectionParams = {
 export type createGroupParams = {
   collectionId: string;
   name?: string;
-  tabs: Tab[] | [];
+  tabs: Omit<Tab, 'id'>[] | [];
 };
 export type updateGroupParams = {
   callback: (group: Group) => Group;
@@ -51,7 +51,7 @@ export type deleteGroupParams = {
 export type createTabsParams = {
   collectionId: string;
   groupId: string;
-  tabs: Tab[];
+  tabs: Omit<Tab, 'id'>[] | [];
 };
 export type deleteTabParams = {
   collectionId: string;
